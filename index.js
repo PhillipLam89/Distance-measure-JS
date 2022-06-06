@@ -14,7 +14,9 @@ function main() {
     const offset =-Math.PI * 0.5  // we only want 0-90 degrees as the phone  is only rotating 90 degs
     const nearFullHeightRadius = Math.min(canvas.width, canvas.height)*0.45
 
-    const fixedAngle = angle * Math.PI * 0.5 + offset
+
+
+    const fixedAngle = angle * Math.PI / 180 + offset
      const ctx = canvas.getContext('2d')
     ctx.clearRect(0,0, canvas.width, canvas.height)
 
@@ -35,11 +37,11 @@ function main() {
     ctx.beginPath()
     ctx.strokeSyle='#47f'
     ctx.moveTo(middleCoordsOfCanvas.x  , middleCoordsOfCanvas.y)
+       const movingArcCalculations =  {
+      x: middleCoordsOfCanvas.x + Math.cos(fixedAngle) * nearFullHeightRadius,
+      y: middleCoordsOfCanvas.y + Math.sin(fixedAngle) * nearFullHeightRadius
+      }
 
-    const movingArcCalculations =  {
-      x: middleCoordsOfCanvas.x + Math.cos(angle * Math.PI / 180 + offset) * nearFullHeightRadius,
-      y: middleCoordsOfCanvas.y + Math.sin(angle * Math.PI / 180 + offset) * nearFullHeightRadius
-    }
 
     ctx.lineTo(movingArcCalculations.x, movingArcCalculations.y)
     ctx.stroke()
