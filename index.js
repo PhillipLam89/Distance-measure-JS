@@ -1,8 +1,12 @@
 let canvas
 let angle = 0
 let angleToRefPoint = 0
+let currentAngleToDisplay = 0
  canvas = document.querySelector('#myCanvas')
-let middleCoordsOfCanvas = {x: canvas.width * 0.5, y: canvas.height * 0.5}
+     canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+
 const textInputUpdatesSlider = document.querySelector('#text-input')
 
 textInputUpdatesSlider.oninput = function() {
@@ -19,23 +23,35 @@ window.onresize = function() {
 
 
 function main() {
-  canvas.width = window.innerWidth
-  canvas.height = window.innerHeight
+
   // const middleCoordsOfCanvas = {x: canvas.width * 0.5, y: canvas.height * 0.5}
   window.addEventListener('deviceorientation', function(e) {
-
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    let middleCoordsOfCanvas = {x: canvas.width * 0.5, y: canvas.height * 0.5}
     angle = e.alpha
     // this offset is because we want angle of ZERO to be starting from the top, not right side
     // subtracting 90 degrees in radians (pi/2) will solve that
    const offset = Math.PI * 0.5 * -1
+   currentAngleToDisplay = e.alpha + offset
+   document.querySelector('span').textContent = currentAngleToDisplay.toFixed(1)
    const fixedAngle = (angle - angleToRefPoint) * Math.PI / 180 + offset
    const distanceToRefPoint =  document.querySelector('#slider').value
    document.querySelector('h3').innerHTML = `Distance To Ref: ${distanceToRefPoint} Feet`
 
+   // we must subtract the offset as we want the REAL internal angle measured by event.alpha
+   // offset was ONLY USED for the circle graph representation & because we cant change event.alpha angle value on the phone
+  let distanceToTarget = Math.abs(Math.tan(fixedAngle-offset) * distanceToRefPoint)
+   console.log('distance', distanceToTarget)
+
     //using the regular radius (width / 2) will have the circle touching top of screen!
     // note that we are using ~half the width of canvas for the radius NOT height because phones
     // are rectangular and using height might produce an arc that is too wide on X-axis
-    const circleRadius = window.innerWidth / 2.3
+    // note: these things are for visual purposes only. the real caculation depends on the phone's output alpha angles
+    const circleRadius = canvas.width < 715 ?
+                         canvas.width / 2.3 :
+                         canvas.width > 715 && canvas.width < 1000 ?
+                         canvas.width / 3.3 :  canvas.width / 5.3
 
 
     const movingArcCalculations =  {
@@ -52,6 +68,7 @@ function main() {
     // since we are only measuring Right Triangles, Right Triangle trig formulas will help
 
     ctx.beginPath()
+    if (movingArcCalculations.y > middleCoordsOfCanvas.y) distanceToTarget = 0
     ctx.fillStyle = movingArcCalculations.y > middleCoordsOfCanvas.y ? rgb(155, 232, 91) : '#47f'
    //the code below draws the arc angle starting from the right (Default) if
    // user is turning right but also draws it starting left correctly if user turns left
