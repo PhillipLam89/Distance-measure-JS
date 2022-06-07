@@ -112,3 +112,7 @@ button#start {
 .hidden {
   display: none;
 }
+
+canvas {
+  margin-top: 3em;
+}
