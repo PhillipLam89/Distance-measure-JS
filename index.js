@@ -1,12 +1,27 @@
 let canvas
 let angle = 0
 let angleToRefPoint = 0
-function main() {
-  canvas = document.querySelector('#myCanvas')
+ canvas = document.querySelector('#myCanvas')
+let middleCoordsOfCanvas = {x: canvas.width * 0.5, y: canvas.height * 0.5}
+const textInputUpdatesSlider = document.querySelector('#text-input')
+
+textInputUpdatesSlider.oninput = function() {
+  //'this' always refers to the element the listner is put on :D
+    document.querySelector('#slider').value = this.value
+}
+
+  //recalculates middle coordinates when window resizes
+window.onresize = function() {
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
-  const middleCoordsOfCanvas = {x: canvas.width * 0.5, y: canvas.height * 0.5}
+  middleCoordsOfCanvas = {x: canvas.width * 0.5, y: canvas.height * 0.5}
+}
 
+
+function main() {
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
+  // const middleCoordsOfCanvas = {x: canvas.width * 0.5, y: canvas.height * 0.5}
   window.addEventListener('deviceorientation', function(e) {
 
     angle = e.alpha
@@ -14,6 +29,8 @@ function main() {
     // subtracting 90 degrees in radians (pi/2) will solve that
    const offset = Math.PI * 0.5 * -1
    const fixedAngle = (angle - angleToRefPoint) * Math.PI / 180 + offset
+   const distanceToRefPoint =  document.querySelector('#slider').value
+   document.querySelector('h3').innerHTML = `Distance To Ref: ${distanceToRefPoint} Feet`
 
     //using the regular radius (width / 2) will have the circle touching top of screen!
     // note that we are using ~half the width of canvas for the radius NOT height because phones
@@ -70,4 +87,10 @@ function reset() {
 console.log('angle', angle)
   angleToRefPoint = angle
 
+}
+
+function distanceChange(event) {
+  // document.querySelector('#text-input').textContent = event.target.value
+   document.querySelector('#text-input').value = event.target.value
+   document.querySelector('h3').textContent =`Distance To Ref: `+ event.target.value + ' feet'
 }
