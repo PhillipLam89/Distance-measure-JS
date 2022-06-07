@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;800&display=swap"
-      rel="stylesheet"/>
+
     <link rel="stylesheet" href="styles.css"/>
     <script src="https://kit.fontawesome.com/54dd1c0248.js" crossorigin="anonymous"></script>
     <title>JavaScript Measure Distance</title>
   </head>
-  <body onload="main()">
+  <body >
+
     <section>
-      <br>
       <input onchange="distanceChange(event)" onpointermove="distanceChange(event)" type="range" id="slider" value="40" min="1" max="100" step="1">
       <div id="user-text-div">
         <input placeholder="Distance from Ref" type="number" id="text-input">
@@ -23,11 +21,14 @@
         </div>
       </div>
       <div id="distance-text">
-        <h3>Distance To Ref: 0 ft</h3>
+        <h5 style="color:white">Counted Walked Distance from Ref: 40</h5>
+        <h2 style="color:goldenrod">From Target to YOU: 0 ft</h2>
+        <h3 style="color:white">Distance Ref to Target</h3>
+
       </div>
     </section>
-
-    <button onclick="reset()">SET Reference Angle</button>
+    <button id="start" onclick="permissionStart(event)">Click To Start</button>
+    <button onclick="reset(event)">SET Reference Angle</button>
     <canvas id="myCanvas"></canvas>
     <script src="index.js"></script>
   </body>
