@@ -25,6 +25,39 @@ window.onresize = function() {
 function main() {
 
   // const middleCoordsOfCanvas = {x: canvas.width * 0.5, y: canvas.height * 0.5}
+
+}
+
+function reset(event) {
+  //saves ref point as current angle since we are using right triangle trig to measure
+console.log('angle', angle)
+event.target.disabled = true
+  angleToRefPoint = angle
+
+}
+
+function distanceChange(event) {
+  // document.querySelector('#text-input').textContent = event.target.value
+   document.querySelector('#text-input').value = event.target.value
+   document.querySelector('h5').textContent =`Counted Walked Distance from Ref: ${event.target.value}`
+}
+
+function permissionStart(e) {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation);
+          }
+        })
+        .catch(console.error);
+    } else {
+      window.addEventListener('deviceorientation', handleOrientation);
+    }
+    e.target.classList.add('hidden')
+}
+
+function handleOrientation(e) {
   window.addEventListener('deviceorientation', function(e) {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
@@ -34,16 +67,17 @@ function main() {
     // subtracting 90 degrees in radians (pi/2) will solve that
    const offset = Math.PI * 0.5 * -1
    currentAngleToDisplay = e.alpha + offset
-   document.querySelector('span').textContent = currentAngleToDisplay.toFixed(1)
+  //  document.querySelector('span').textContent = currentAngleToDisplay.toFixed(1)
    const fixedAngle = (angle - angleToRefPoint) * Math.PI / 180 + offset
-   const distanceToRefPoint =  document.querySelector('#slider').value
-   document.querySelector('h3').innerHTML = `Distance To Ref: ${distanceToRefPoint} Feet`
+   const distanceYOUandRefPoint =  document.querySelector('#slider').value
+
 
    // we must subtract the offset as we want the REAL internal angle measured by event.alpha
    // offset was ONLY USED for the circle graph representation & because we cant change event.alpha angle value on the phone
-  let distanceToTarget = Math.abs(Math.tan(fixedAngle-offset) * distanceToRefPoint)
-   console.log('distance', distanceToTarget)
-
+  let distanceRefPointToTarget = Math.abs(Math.tan(fixedAngle-offset) * distanceYOUandRefPoint)
+    const distanceCurrentUserPositionToTarget = Math.sqrt(Math.pow(distanceRefPointToTarget, 2) + Math.pow(+distanceYOUandRefPoint, 2))
+   document.querySelector('h3').innerHTML = `Distance Ref Point to Target: ${distanceRefPointToTarget.toFixed(1)} Feet`
+    document.querySelector('#distance-text > h2').innerHTML = `From YOU to Target: ${distanceCurrentUserPositionToTarget.toFixed(1)} Feet`
     //using the regular radius (width / 2) will have the circle touching top of screen!
     // note that we are using ~half the width of canvas for the radius NOT height because phones
     // are rectangular and using height might produce an arc that is too wide on X-axis
@@ -68,7 +102,7 @@ function main() {
     // since we are only measuring Right Triangles, Right Triangle trig formulas will help
 
     ctx.beginPath()
-    if (movingArcCalculations.y > middleCoordsOfCanvas.y) distanceToTarget = 0
+    if (movingArcCalculations.y > middleCoordsOfCanvas.y) distanceRefPointToTarget = 0
     ctx.fillStyle = movingArcCalculations.y > middleCoordsOfCanvas.y ? rgb(155, 232, 91) : '#47f'
    //the code below draws the arc angle starting from the right (Default) if
    // user is turning right but also draws it starting left correctly if user turns left
@@ -97,17 +131,4 @@ function main() {
     ctx.lineTo(movingArcCalculations.x, movingArcCalculations.y)
     ctx.stroke()
   })
-}
-
-function reset() {
-  //saves ref point as current angle since we are using right triangle trig to measure
-console.log('angle', angle)
-  angleToRefPoint = angle
-
-}
-
-function distanceChange(event) {
-  // document.querySelector('#text-input').textContent = event.target.value
-   document.querySelector('#text-input').value = event.target.value
-   document.querySelector('h3').textContent =`Distance To Ref: `+ event.target.value + ' feet'
 }
