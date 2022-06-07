@@ -90,6 +90,25 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
-body > section  > #distance-text {
-  transform: translate(-18%);
+
+
+
+button#start {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  background-color: rgb(49, 14, 14);
+  color: White;
+  transform: scale(3);
+  padding: 2em;
+  height: 60vh;
+  width: 100vw;
+  z-index: 500;
+  opacity: .95;
+  cursor: pointer;
+
+}
+
+.hidden {
+  display: none;
 }
