@@ -2,11 +2,46 @@ body {
   margin: 0;
   overflow: hidden;
   background-color: white;
-  padding: 2em;
+  height: 100%;
   margin: 0 auto;
 }
 
 canvas {
-background-color: rgb(53, 216, 96);
+  /* height: 50%; */
+  background-color: rgb(155, 232, 91);
 }
+
+button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  padding: 1.3em;
+  font-weight: 900;
+}
+
+section {
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+
+  display: flex;
+  justify-content: center;
+  background-color: goldenrod;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+}
+
+h4 {
+
+  margin-top: 1em;
+  margin-bottom: 0;
+
+}
+
+input#text-input {
+  margin-bottom: 1em;
 }
